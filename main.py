@@ -1,7 +1,11 @@
 import RPi.GPIO as GPIO
 import time
 import sys
+import subprocess
 from hx711 import HX711
+
+upload_command = "/home/pi/Documents/BID_RECYCLE/BID_Recyling/upload_data.py"
+
 
 def cleanAndExit():
     print "Cleaning..."
@@ -9,7 +13,7 @@ def cleanAndExit():
     print "Bye!"
     sys.exit()
 
-hx = HX711(5, 6)
+hx1 = HX711(5, 6)
 
 # I've found out that, for some reason, the order of the bytes is not always the same between versions of python, numpy and the hx711 itself.
 # Still need to figure out why does it change.
@@ -18,7 +22,7 @@ hx = HX711(5, 6)
 # The first parameter is the order in which the bytes are used to build the "long" value.
 # The second paramter is the order of the bits inside each byte.
 # According to the HX711 Datasheet, the second parameter is MSB so you shouldn't need to modify it.
-hx.set_reading_format("LSB", "MSB")
+hx1.set_reading_format("LSB", "MSB")
 
 # HOW TO CALCULATE THE REFFERENCE UNIT
 # To set the reference unit to 1. Put 1kg on your sensor or anything you have and know exactly how much it weights.
@@ -26,10 +30,10 @@ hx.set_reading_format("LSB", "MSB")
 # and I got numbers around 184000 when I added 2kg. So, according to the rule of thirds:
 # If 2000 grams is 184000 then 1000 grams is 184000 / 2000 = 92.
 #hx.set_reference_unit(113)
-hx.set_reference_unit(92)
+hx1.set_reference_unit(240)
 
-hx.reset()
-hx.tare()
+hx1.reset()
+hx1.tare()
 
 while True:
     try:
@@ -41,11 +45,20 @@ while True:
         #print binary_string + " " + np_arr8_string
         
         # Prints the weight. Comment if you're debbuging the MSB and LSB issue.
-        val = hx.get_weight(5)
-        print val
+        #val = hx.get_weight(5)
+        val1 = max(0,int(hx1.get_weight(5)))              
+        #print(upload_command)
+        
+        try:
+            x = subprocess.check_output(["python",upload_command,str(val1),str(val1),str(val1),str(val1),str(val1)],stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError("command '{}' return with error (code{}): {}".format(e.cmd,e.returncode,e.output))
+        
+        returned = x.decode("utf-8")
+        print(returned)
 
-        hx.power_down()
-        hx.power_up()
-        time.sleep(0.5)
+        hx1.power_down()
+        hx1.power_up()
+        time.sleep(1)
     except (KeyboardInterrupt, SystemExit):
         cleanAndExit()

@@ -6,6 +6,7 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 import time,datetime
+import sys
 
 # Setup the Sheets API
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
@@ -32,21 +33,42 @@ else:
 	last_id = values[last_position-2][0]
 	last_day = values[last_position-2][1]
 	last_data = values[last_position-2][2]
-	print('Last id: %s' % (last_id))
-	print('Last day: %s' % (last_day))
-	print('Last data: %s' % (last_data))
-	print('Position: %d' % (last_position))        
+	#print('Last id: %s' % (last_id))
+	#print('Last day: %s' % (last_day))
+	#print('Last data: %s' % (last_data))
+	print('Last Position: %d' % (last_position))        
 
     
         
         
      
-#OBTIENE LOS VALORES PARA AGREGAR AL SHEET        
+#OBTIENE LOS VALORES PARA AGREGAR AL SHEET
+timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%d/%m/%Y %H:%M:%S')	
 values = [
     [
-        int(last_id)+1,
-        datetime.datetime.fromtimestamp(time.time()).strftime('%d/%m/%Y %H:%M:%S'), 
-        int(last_data)+1
+        1,
+        timestamp, 
+        sys.argv[1]
+    ],
+    [
+        2,
+        timestamp, 
+        sys.argv[2]
+    ],
+    [
+        3,
+        timestamp, 
+        sys.argv[3]
+    ],
+    [
+        4,
+        timestamp, 
+        sys.argv[4]
+    ],
+    [
+        5,
+        timestamp, 
+        sys.argv[5]
     ]
     # Additional rows ...
 ]
@@ -62,6 +84,6 @@ spreadsheet_id = '10ZP4AgFVVS6fVF1O8l0wMUE5o04CnzUM9C_Ncdo88Eo'
 result = service.spreadsheets().values().append(
     spreadsheetId=spreadsheet_id, range=range_name,
     valueInputOption=value_input_option, body=body).execute()
-print('{0} cells appended.'.format(result \
+print('{0} cells appended successfully.'.format(result \
                                        .get('updates') \
                                        .get('updatedCells')));
