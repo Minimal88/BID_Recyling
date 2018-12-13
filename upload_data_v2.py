@@ -20,20 +20,15 @@ service = build('sheets', 'v4', http=creds.authorize(Http()))
 
 
 
-#INTENTA OBTENER LOS VALORES EXISTENTENTES AL SHEET
+#OBTIENE LOS VALORES EXISTENTENTES AL SHEET
 SPREADSHEET_ID = '10ZP4AgFVVS6fVF1O8l0wMUE5o04CnzUM9C_Ncdo88Eo'
 RANGE_NAME = 'cocina!A2:C'
-
-try:
-    
-    result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
+result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                              range=RANGE_NAME).execute()
-    values = result.get('values', [])
-except:
-    print('Error leyendo datos existentes')
+values = result.get('values', [])
 
 if not values:
-    print('Error no se encontaron datos')
+    print('No data found.')
 else:	
 	last_position = len(values) + 1    
 	last_id = values[last_position-2][0]
@@ -55,28 +50,27 @@ values = [
         1,
         timestamp, 
         sys.argv[1]
+    ],
+    [
+        2,
+        timestamp, 
+        sys.argv[2]
+    ],
+    [
+        3,
+        timestamp, 
+        sys.argv[3]
+    ],
+    [
+        4,
+        timestamp, 
+        sys.argv[4]
+    ],
+    [
+        5,
+        timestamp, 
+        sys.argv[5]
     ]
-    #,
-    #[
-    #    2,
-    #    timestamp, 
-    #    sys.argv[2]
-    #],
-    #[
-    #    3,
-    #    timestamp, 
-    #    sys.argv[3]
-    #],
-    #[
-    #    4,
-    #    timestamp, 
-    #    sys.argv[4]
-    #],
-    #[
-    #    5,
-    #    timestamp, 
-    #    sys.argv[5]
-    ##]
     # Additional rows ...
 ]
 body = {
@@ -88,13 +82,9 @@ range_name = range_name + str(last_position+1)
 value_input_option = 'USER_ENTERED'
 spreadsheet_id = '10ZP4AgFVVS6fVF1O8l0wMUE5o04CnzUM9C_Ncdo88Eo'
 
-#Intenta enviar los datos a la nube
-try:
-    result = service.spreadsheets().values().append(
-        spreadsheetId=spreadsheet_id, range=range_name,
-        valueInputOption=value_input_option, body=body).execute()
-    print('{0} cells appended successfully.'.format(result \
+result = service.spreadsheets().values().append(
+    spreadsheetId=spreadsheet_id, range=range_name,
+    valueInputOption=value_input_option, body=body).execute()
+print('{0} cells appended successfully.'.format(result \
                                        .get('updates') \
                                        .get('updatedCells')));
-except:
-    print('Error al subir los datos a la nube!')
