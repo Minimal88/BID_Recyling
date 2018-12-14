@@ -42,7 +42,7 @@ else:
 	#print('Last id: %s' % (last_id))
 	#print('Last day: %s' % (last_day))
 	#print('Last data: %s' % (last_data))
-	print('Last Position: %d' % (last_position))        
+	print('Ultima posicion tabla: %d' % (last_position))        
 
     
         
@@ -56,22 +56,22 @@ values = [
         timestamp, 
         sys.argv[1]
     ]
-    #,
-    #[
-    #    2,
-    #    timestamp, 
-    #    sys.argv[2]
-    #],
-    #[
-    #    3,
-    #    timestamp, 
-    #    sys.argv[3]
-    #],
-    #[
-    #    4,
-    #    timestamp, 
-    #    sys.argv[4]
-    #],
+    ,
+    [
+        2,
+        timestamp, 
+        sys.argv[2]
+    ],
+    [
+        3,
+        timestamp, 
+        sys.argv[3]
+    ],
+    [
+        4,
+        timestamp, 
+        sys.argv[4]
+    ],
     #[
     #    5,
     #    timestamp, 
@@ -93,7 +93,7 @@ try:
     result = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id, range=range_name,
         valueInputOption=value_input_option, body=body).execute()
-    print('{0} cells appended successfully.'.format(result \
+    print('{0} Celdas subidas correctamente!.'.format(result \
                                        .get('updates') \
                                        .get('updatedCells')));
 except:
