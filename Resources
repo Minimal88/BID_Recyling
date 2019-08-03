@@ -1,0 +1,19 @@
+## Node MCU Firmware
+https://github.com/nodemcu/nodemcu-firmware/archive/0.9.6-dev_20150704.zip
+
+## Flasher
+https://github.com/espressif/esptool
+https://github.com/espressif/esptool/archive/master.zip
+
+## Flash the Firmware with:
+sudo python esptool.py --port /dev/ttyUSB0  write_flash 0x00000 ../nodemcu-firmware-0.9.6-dev_20150704/pre_build/latest/nodemcu_latest.bin
+
+## Load Sensor Lib HX711
+https://github.com/bogde/HX711
+https://github.com/bogde/HX711/archive/master.zip
+
+## Adafruit MQTT (No lo se rick)
+https://github.com/adafruit/Adafruit_MQTT_Library.git
+
+## Pubsubclient for MQTT
+https://github.com/knolleary/pubsubclient.git
